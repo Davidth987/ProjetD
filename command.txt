@@ -1,0 +1,17 @@
+Compile the source files using the gcc command:
+gcc -o programme grand_nombre.c initialisation.c main.c
+
+
+
+Run the program by typing:
+./main
+
+
+token git :
+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
+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
+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
+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
+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
+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
+
