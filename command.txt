@@ -15,3 +15,8 @@ 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
 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
 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
 
+
+git
+push envoyer
+pull récupérer
+merge c'est quand il ya un conflit (1 fichier sur git et 1 sur le pc)

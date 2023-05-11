@@ -115,3 +115,35 @@ int inferieur_ou_egal_a(const GrandNombre* gn1, const GrandNombre* gn2)
     return inferieur_a(gn1, gn2) || egal_a(gn1, gn2);
 }
 
+void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat)
+{
+    resultat->taille = gn1->taille + gn2->taille;
+    resultat->positif = gn1->positif == gn2->positif;
+    for (int i = 0; i < resultat->taille; i++) {
+        resultat->digits[i] = 0;
+    }
+
+    for (int i = 0; i < gn2->taille; i++) {
+        for (int j = 0; j < gn1->taille; j++) {
+            int produit = gn1->digits[j] * gn2->digits[i];
+            int retenue = produit / 10;
+            produit %= 10;
+
+            resultat->digits[i+j] += produit;
+            if (resultat->digits[i+j] >= 10) {
+                resultat->digits[i+j+1] += resultat->digits[i+j] / 10;
+                resultat->digits[i+j] %= 10;
+            }
+
+            resultat->digits[i+j+1] += retenue;
+        }
+    }
+
+    while (resultat->taille > 0 && resultat->digits[resultat->taille - 1] == 0) {
+        resultat->taille--;
+    }
+
+    if (resultat->taille == 0) {
+        resultat->positif = true;
+    }
+}
