@@ -1,6 +1,10 @@
 Compile the source files using the gcc command:
 gcc -o programme grand_nombre.c initialisation.c main.c
 
+Compile the source files using the gcc command wihout 0 error:
+gcc -Wall -Wfatal-errors -Werror -o programme grand_nombre.c initialisation.c main.c
+
+
 
 
 Run the program by typing:

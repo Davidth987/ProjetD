@@ -9,6 +9,7 @@ typedef struct GrandNombre {
 
 void liberer_grand_nombre(GrandNombre *nombre);
 void afficher_grand_nombre(const GrandNombre* gn);
+void inverser_grand_nombre(const GrandNombre* original, GrandNombre* inverse);
 
 
 void additionner_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);

@@ -4,6 +4,19 @@
 
 #include "grand_nombre.h"
 
+void inverser_grand_nombre(const GrandNombre* original, GrandNombre* inverse) {
+    inverse->taille = original->taille;
+    inverse->positif = original->positif;
+    inverse->digits = malloc(inverse->taille * sizeof(int));
+    if(inverse->digits == NULL) {
+        printf("Erreur : Impossible d'allouer de la mémoire pour inverse->digits.\n");
+        return;
+    }
+    for (int i = 0; i < original->taille; i++) {
+        inverse->digits[i] = original->digits[original->taille - 1 - i];
+    }
+}
+
 
 void liberer_grand_nombre(GrandNombre *nombre) {
     if (nombre->digits != NULL) {
@@ -34,7 +47,9 @@ void additionner_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, Gr
     int somme = 0;
 
     for (int i = 0; i < taille_max; i++) {
-        somme = gn1->digits[i] + gn2->digits[i] + retenue;
+        int digit1 = i < gn1->taille ? gn1->digits[i] : 0;
+        int digit2 = i < gn2->taille ? gn2->digits[i] : 0;
+        somme = digit1 + digit2 + retenue;
         retenue = somme / 10;
         resultat->digits[i] = somme % 10;
     }
@@ -49,12 +64,26 @@ void additionner_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, Gr
     resultat->positif = true;
 }
 
+
 void soustraction_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat)
 {
+    if (gn2->taille > gn1->taille ||
+        (gn2->taille == gn1->taille && gn2->digits[gn2->taille - 1] > gn1->digits[gn1->taille - 1])) {
+        printf("Erreur : gn2 est plus grand que gn1. La soustraction donnerait un nombre négatif.\n");
+        return;
+    }
+
+    // Allocate memory for resultat digits, if not done already.
+    resultat->digits = malloc(gn1->taille * sizeof(int));
+    if(resultat->digits == NULL) {
+        printf("Erreur : Impossible d'allouer de la mémoire pour resultat->digits.\n");
+        return;
+    }
+
     int retenue = 0;
     int difference = 0;
 
-    for (int i = gn1->taille - 1; i >= 0; i--) {
+    for (int i = 0; i < gn1->taille; i++) {
         difference = gn1->digits[i] - (i < gn2->taille ? gn2->digits[i] : 0) - retenue;
 
         if (difference < 0) {
@@ -74,6 +103,7 @@ void soustraction_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, G
 
     resultat->positif = (resultat->taille != 0 || resultat->digits[0] != 0);
 }
+
 
 int egal_a(const GrandNombre* gn1, const GrandNombre* gn2)
 {
@@ -144,6 +174,8 @@ void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, Gra
     }
 
     if (resultat->taille == 0) {
+        resultat->taille = 1; // Assumer un seul chiffre zéro pour représenter zéro
         resultat->positif = true;
     }
 }
+
