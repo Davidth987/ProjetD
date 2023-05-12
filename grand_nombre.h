@@ -4,7 +4,7 @@
 typedef struct GrandNombre {
     int *digits;
     int taille;
-    bool positif;
+    int positif;
 } GrandNombre;
 
 void liberer_grand_nombre(GrandNombre *nombre);
