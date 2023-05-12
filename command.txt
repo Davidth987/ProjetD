@@ -4,11 +4,19 @@ gcc -o programme grand_nombre.c initialisation.c main.c
 Compile the source files using the gcc command wihout 0 error:
 gcc -Wall -Wfatal-errors -Werror -o programme grand_nombre.c initialisation.c main.c
 
-
+Compile the source files using the gcc command wihout 0 error and send erreur in erreur.txt:
+gcc -Wall -Wfatal-errors -Werror -o programme grand_nombre.c initialisation.c main.c 2> erreur.txt
 
 
 Run the program by typing:
-./main
+./programme
+
+Run the program by typing and send result to file resultat.txt:
+./programme > resultat.txt
+
+
+big command :
+gcc -Wall -Wfatal-errors -Werror -o programme grand_nombre.c initialisation.c main.c 2> erreur.txt && ./programme > resultat.txt
 
 
 token git :

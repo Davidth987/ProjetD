@@ -1,0 +1,9 @@
+Valeur de A inversée : +87654
+Valeur de B inversée : +9765
+Resultat de l'addition inversé : +97419
+Resultat de la soustraction inversé : +77889
+Resultat de la multiplication inversé : +855941310
+A et B égal ? 0
+A et B different ? 1
+A inférieur de B ? 0
+A inférieur ou égal de B ? 0
