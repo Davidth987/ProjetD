@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
+#include "tete.h"
 #include "grand_nombre.h"
 #include "initialisation.h"
 

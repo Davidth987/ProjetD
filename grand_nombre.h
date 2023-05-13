@@ -1,5 +1,8 @@
+#include "tete.h"
+
 #ifndef GRAND_NOMBRE_H
 #define GRAND_NOMBRE_H
+
 
 typedef struct GrandNombre {
     int *digits;

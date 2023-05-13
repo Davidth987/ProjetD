@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdbool.h>
+#include "tete.h"
 
 #include "initialisation.h"
 #include "grand_nombre.h"
