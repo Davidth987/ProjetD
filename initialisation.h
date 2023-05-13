@@ -1,4 +1,5 @@
 // initialisation.h
+#include "tete.h"
 
 #ifndef INITIALISATION_H
 #define INITIALISATION_H
