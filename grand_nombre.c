@@ -92,7 +92,7 @@ void soustraction_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, G
 
         resultat->digits = malloc(minuend->taille * sizeof(int));
         if(resultat->digits == NULL) {
-            printf("Erreur : Impossible d'allouer de la mémoire pour resultat->digits.\n");
+            printf("Erreur de mémoire\n");
             return;
         }
 
@@ -128,7 +128,7 @@ void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, Gra
         resultat->positif = true;
         resultat->digits = malloc(sizeof(int));
         if(resultat->digits == NULL) {
-            printf("Erreur : Impossible d'allouer de la mémoire pour resultat->digits.\n");
+            printf("Erreur de mémoire\n");
             return;
         }
         resultat->digits[0] = 0;
@@ -139,7 +139,7 @@ void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, Gra
     resultat->positif = gn1->positif == gn2->positif;
     resultat->digits = calloc(resultat->taille, sizeof(int));
     if(resultat->digits == NULL) {
-        printf("Erreur : Impossible d'allouer de la mémoire pour resultat->digits.\n");
+        printf("Erreur de mémoire\n");
         return;
     }
 
