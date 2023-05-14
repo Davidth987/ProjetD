@@ -7,7 +7,7 @@ void initialiser_a(GrandNombre *a)
 {
     a->digits = malloc(5 * sizeof(int));
     a->taille = 5;
-    a->positif = true;
+    a->positif = false;
 
     if (a->digits != NULL) {
         a->digits[0] = 4;

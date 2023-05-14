@@ -11,10 +11,10 @@ typedef struct GrandNombre {
     int positif;
 } GrandNombre;
 
-void liberer_grand_nombre(GrandNombre *nombre);
-void afficher_grand_nombre(const GrandNombre* gn);
 void inverser_grand_nombre(const GrandNombre* original, GrandNombre* inverse);
-
+void negatif(const GrandNombre* original, GrandNombre* resultat);
+void afficher_grand_nombre(const GrandNombre* gn);
+void liberer_grand_nombre(GrandNombre *nombre);
 
 void additionner_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
 void soustraction_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
