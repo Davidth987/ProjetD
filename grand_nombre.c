@@ -51,92 +51,87 @@ void afficher_grand_nombre(const GrandNombre* gn)
     printf("\n");
 }
 
-void additionner_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat)
-{
-    GrandNombre neg;
-    if (gn1->positif == gn2->positif) {
-        // Same sign, proceed as before.
-        int taille_max = (gn1->taille > gn2->taille) ? gn1->taille : gn2->taille;
-        int retenue = 0;
-        int somme = 0;
+void additionner_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat_addition) {
+    // Créez des copies locales de gn1 et gn2
+    GrandNombre gn1_bis = *gn1;
+    GrandNombre gn2_bis = *gn2;
 
-        resultat->digits = malloc((taille_max + 1) * sizeof(int));
-        if(resultat->digits == NULL) {
-            printf("Erreur : Impossible d'allouer de la mémoire pour resultat->digits.\n");
-            return;
-        }
+    // Assurez-vous que les deux nombres sont positifs
+    if (!gn1_bis.positif) {
+        gn1_bis.positif = true;
+    }
+    if (!gn2_bis.positif) {
+        gn2_bis.positif = true;
+    }
 
-        for (int i = 0; i < taille_max; i++) {
-            int digit1 = i < gn1->taille ? gn1->digits[i] : 0;
-            int digit2 = i < gn2->taille ? gn2->digits[i] : 0;
-            somme = digit1 + digit2 + retenue;
-            retenue = somme / 10;
-            resultat->digits[i] = somme % 10;
-        }
+    // Trouver la taille maximale entre gn1 et gn2
+    int taille_max = gn1_bis.taille > gn2_bis.taille ? gn1_bis.taille : gn2_bis.taille;
 
-        if (retenue > 0) {
-            resultat->digits[taille_max] = retenue;
-            resultat->taille = taille_max + 1;
-        } else {
-            resultat->taille = taille_max;
+    // Initialiser le résultat avec la taille maximale
+    resultat_addition->digits = malloc((taille_max + 1) * sizeof(int));
+    resultat_addition->taille = taille_max;
+    resultat_addition->positif = true;
+
+    // Ajouter les chiffres de gn1 et gn2
+    int retenue = 0;
+    for (int i = 0; i < taille_max; i++) {
+        int sum = retenue;
+        if (i < gn1_bis.taille) {
+            sum += gn1_bis.digits[i];
         }
-        resultat->positif = gn1->positif;
-    } else {
-        // Different signs, need to subtract.
-        if (inferieur_a(gn1, gn2)) {
-            negatif(gn1, &neg);
-            soustraction_grand_nombre(gn2, &neg, resultat);
-        } else {
-            negatif(gn2, &neg);
-            soustraction_grand_nombre(gn1, &neg, resultat);
+        if (i < gn2_bis.taille) {
+            sum += gn2_bis.digits[i];
         }
-        liberer_grand_nombre(&neg);
+        resultat_addition->digits[i] = sum % 10;
+        retenue = sum / 10;
+    }
+    if (retenue != 0) {
+        resultat_addition->digits[taille_max] = retenue;
+        resultat_addition->taille++;
     }
 }
 
-void soustraction_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat)
-{
-    GrandNombre neg;
-    if (gn1->positif == gn2->positif) {
-        // Same sign, proceed as before.
-        if (inferieur_a(gn1, gn2)) {
-            soustraction_grand_nombre(gn2, gn1, resultat);
-            resultat->positif = !(gn1->positif);
-        } else {
-            resultat->digits = malloc(gn1->taille * sizeof(int));
-            if(resultat->digits == NULL) {
-                printf("Erreur de mémoire\n");
-                return;
-            }
 
-            int retenue = 0;
-            int difference = 0;
+void soustraire_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat_soustraire) {
+    // Créez une copie locale de gn1 et gn2
+    GrandNombre gn1_bis = *gn1;
+    GrandNombre gn2_bis = *gn2;
 
-            for (int i = 0; i < gn1->taille; i++) {
-                difference = gn1->digits[i] - (i < gn2->taille ? gn2->digits[i] : 0) - retenue;
+    // Assurez-vous que gn2 est positif
+    if (!gn2_bis.positif) {
+        gn2_bis.positif = true;
+    }
 
-                if (difference < 0) {
-                    difference += 10;
-                    retenue = 1;
-                } else {
-                    retenue = 0;
-                }
+    // Vérifiez que gn1 est plus grand que ou égal à gn2
+    if (gn1_bis.taille < gn2_bis.taille || !gn1_bis.positif) {
+        printf("Erreur: gn1 doit être plus grand que ou égal à gn2 et positif.\n");
+        return;
+    }
 
-                resultat->digits[i] = difference;
-            }
+    // Initialiser le résultat avec la taille de gn1
+    resultat_soustraire->digits = malloc(gn1_bis.taille * sizeof(int));
+    resultat_soustraire->taille = gn1_bis.taille;
+    resultat_soustraire->positif = true;
 
-            resultat->taille = gn1->taille;
-            while (resultat->taille > 0 && resultat->digits[resultat->taille - 1] == 0) {
-                resultat->taille--;
-            }
-
-            resultat->positif = gn1->positif;
+    // Soustraire les chiffres de gn2 à ceux de gn1
+    int emprunt = 0;
+    for (int i = 0; i < gn1_bis.taille; i++) {
+        int diff = gn1_bis.digits[i] - emprunt;
+        if (i < gn2_bis.taille) {
+            diff -= gn2_bis.digits[i];
         }
-    } else {
-        // Different signs, need to add.
-        negatif(gn2, &neg);
-        additionner_grand_nombre(gn1, &neg, resultat);
-        liberer_grand_nombre(&neg);
+        if (diff < 0) {
+            diff += 10;
+            emprunt = 1;
+        } else {
+            emprunt = 0;
+        }
+        resultat_soustraire->digits[i] = diff;
+    }
+
+    // Mettre à jour la taille du résultat pour éliminer les zéros non significatifs
+    while (resultat_soustraire->taille > 1 && resultat_soustraire->digits[resultat_soustraire->taille - 1] == 0) {
+        resultat_soustraire->taille--;
     }
 }
 

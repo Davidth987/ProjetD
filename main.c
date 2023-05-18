@@ -24,9 +24,9 @@ int main()
     additionner_grand_nombre(&a, &b, &resultat_addition);
 
     // Subtraction
-    GrandNombre resultat_soustraction = { 0 };
-    resultat_soustraction.digits = malloc(a.taille * sizeof(int));
-    soustraction_grand_nombre(&a, &b, &resultat_soustraction);
+    GrandNombre resultat_soustraire = { 0 };
+    resultat_soustraire.digits = malloc(a.taille * sizeof(int));
+    soustraire_grand_nombre(&a, &b, &resultat_soustraire);
 
     // Multiplication
     GrandNombre resultat_multiplication = { 0 };
@@ -38,7 +38,7 @@ int main()
     inverser_grand_nombre(&resultat_addition, &reverse_resultat_addition);
 
     GrandNombre reverse_resultat_soustraction = { 0 };
-    inverser_grand_nombre(&resultat_soustraction, &reverse_resultat_soustraction);
+    inverser_grand_nombre(&resultat_soustraire, &reverse_resultat_soustraction);
 
     GrandNombre reverse_resultat_multiplication = { 0 };
     inverser_grand_nombre(&resultat_multiplication, &reverse_resultat_multiplication);
@@ -83,7 +83,7 @@ int main()
     liberer_grand_nombre(&a);
     liberer_grand_nombre(&b);
     liberer_grand_nombre(&resultat_addition);
-    liberer_grand_nombre(&resultat_soustraction);
+    liberer_grand_nombre(&resultat_soustraire);
     liberer_grand_nombre(&resultat_multiplication);
     liberer_grand_nombre(&reverse_a);
     liberer_grand_nombre(&reverse_b);

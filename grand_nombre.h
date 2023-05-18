@@ -17,7 +17,7 @@ void afficher_grand_nombre(const GrandNombre* gn);
 void liberer_grand_nombre(GrandNombre *nombre);
 
 void additionner_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
-void soustraction_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
+void soustraire_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
 void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
 
 
