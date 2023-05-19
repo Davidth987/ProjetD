@@ -137,33 +137,29 @@ void soustraire_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, Gra
 
 
 
-void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat)
-{
-    int taille_resultat = gn1->taille + gn2->taille;
+void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat) {
+    // Initialiser le résultat
+    resultat->taille = gn1->taille + gn2->taille;
+    resultat->digits = calloc(resultat->taille, sizeof(int));
+    resultat->positif = !(gn1->positif ^ gn2->positif);
 
-    resultat->digits = calloc(taille_resultat, sizeof(int));
-    if(resultat->digits == NULL) {
-        printf("Erreur de mémoire\n");
-        return;
-    }
-
+    // Multiplication
     for (int i = 0; i < gn1->taille; i++) {
         for (int j = 0; j < gn2->taille; j++) {
-            resultat->digits[i+j] += gn1->digits[i] * gn2->digits[j];
+            resultat->digits[i + j] += gn1->digits[i] * gn2->digits[j];
         }
     }
 
-    for (int k = 0; k < taille_resultat - 1; k++) {
-        resultat->digits[k+1] += resultat->digits[k] / 10;
-        resultat->digits[k] %= 10;
+    // Normaliser les retenues
+    for (int i = 0; i < resultat->taille - 1; i++) {
+        resultat->digits[i + 1] += resultat->digits[i] / 10;
+        resultat->digits[i] %= 10;
     }
 
-    resultat->taille = taille_resultat;
-    while (resultat->taille > 0 && resultat->digits[resultat->taille - 1] == 0) {
+    // Éliminer les zéros non significatifs
+    while (resultat->taille > 1 && resultat->digits[resultat->taille - 1] == 0) {
         resultat->taille--;
     }
-
-    resultat->positif = gn1->positif == gn2->positif;
 }
 
 
