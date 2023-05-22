@@ -33,6 +33,11 @@ int main()
     resultat_multiplication.digits = malloc((a.taille + b.taille) * sizeof(int));
     multiplier_grand_nombre(&a, &b, &resultat_multiplication);
 
+    // Multiplication Karatsuba
+    GrandNombre resultat_multiplication_karatsuba = { 0 };
+    resultat_multiplication_karatsuba.digits = malloc((a.taille + b.taille) * sizeof(int));
+    multiplier_karatsuba_grand_nombre(&a, &b, &resultat_multiplication_karatsuba);
+
     // reverse résultat
     GrandNombre reverse_resultat_addition = { 0 };
     inverser_grand_nombre(&resultat_addition, &reverse_resultat_addition);
@@ -43,6 +48,8 @@ int main()
     GrandNombre reverse_resultat_multiplication = { 0 };
     inverser_grand_nombre(&resultat_multiplication, &reverse_resultat_multiplication);
 
+    GrandNombre reverse_resultat_multiplication_karatsuba = { 0 };
+    inverser_grand_nombre(&resultat_multiplication_karatsuba, &reverse_resultat_multiplication_karatsuba);
     // Print values and comparisons
     /*printf("Valeur de A : ");
     afficher_grand_nombre(&a);
@@ -79,6 +86,12 @@ int main()
     printf("A inférieur de B ? %d\n", inferieur_a(&a, &b));
     printf("A inférieur ou égal de B ? %d\n", inferieur_ou_egal_a(&a, &b));
 
+    //printf("Resultat de la multiplication Karatsuba : ");
+    //afficher_grand_nombre(&resultat_multiplication_karatsuba);
+
+    printf("Resultat de la multiplication Karatsuba inversé : ");
+    afficher_grand_nombre(&reverse_resultat_multiplication_karatsuba);
+
     // Free memory
     liberer_grand_nombre(&a);
     liberer_grand_nombre(&b);
@@ -90,6 +103,7 @@ int main()
     liberer_grand_nombre(&reverse_resultat_addition);
     liberer_grand_nombre(&reverse_resultat_soustraction);
     liberer_grand_nombre(&reverse_resultat_multiplication);
-
+    liberer_grand_nombre(&resultat_multiplication_karatsuba);
+    liberer_grand_nombre(&reverse_resultat_multiplication_karatsuba);
     return 0;
 }

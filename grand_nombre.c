@@ -135,34 +135,38 @@ void soustraire_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, Gra
     }
 }
 
+void multiplier_grand_nombre_recursive(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat, int position) {
 
+    if (position >= gn2->taille) {
 
-void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat) {
-    // Initialiser le résultat
-    resultat->taille = gn1->taille + gn2->taille;
-    resultat->digits = calloc(resultat->taille, sizeof(int));
-    resultat->positif = !(gn1->positif ^ gn2->positif);
-
-    // Multiplication
-    for (int i = 0; i < gn1->taille; i++) {
-        for (int j = 0; j < gn2->taille; j++) {
-            resultat->digits[i + j] += gn1->digits[i] * gn2->digits[j];
+        for (int i = 0; i < resultat->taille - 1; i++) {
+            resultat->digits[i + 1] += resultat->digits[i] / 10;
+            resultat->digits[i] %= 10;
         }
+
+        while (resultat->taille > 1 && resultat->digits[resultat->taille - 1] == 0) {
+            resultat->taille--;
+        }
+
+        resultat->positif = !(gn1->positif ^ gn2->positif);
+
+        return;
     }
 
-    // Normaliser les retenues
-    for (int i = 0; i < resultat->taille - 1; i++) {
-        resultat->digits[i + 1] += resultat->digits[i] / 10;
-        resultat->digits[i] %= 10;
+    for (int i = 0; i < gn1->taille; i++) {
+        resultat->digits[i + position] += gn1->digits[i] * gn2->digits[position];
     }
 
-    // Éliminer les zéros non significatifs
-    while (resultat->taille > 1 && resultat->digits[resultat->taille - 1] == 0) {
-        resultat->taille--;
-    }
+    multiplier_grand_nombre_recursive(gn1, gn2, resultat, position + 1);
 }
 
+void multiplier_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat) {
 
+    resultat->taille = gn1->taille + gn2->taille;
+    resultat->digits = calloc(resultat->taille, sizeof(int));
+
+    multiplier_grand_nombre_recursive(gn1, gn2, resultat, 0);
+}
 
 int egal_a(const GrandNombre* gn1, const GrandNombre* gn2)
 {
@@ -210,4 +214,79 @@ int inferieur_a(const GrandNombre* gn1, const GrandNombre* gn2)
 int inferieur_ou_egal_a(const GrandNombre* gn1, const GrandNombre* gn2)
 {
     return inferieur_a(gn1, gn2) || egal_a(gn1, gn2);
+}
+
+void decouper_grand_nombre(const GrandNombre* gn, GrandNombre* gn_high, GrandNombre* gn_low, int m) {
+    gn_high->taille = gn->taille - m;
+    gn_low->taille = m;
+    gn_high->positif = gn->positif;
+    gn_low->positif = gn->positif;
+
+    gn_high->digits = malloc(gn_high->taille * sizeof(int));
+    gn_low->digits = malloc(gn_low->taille * sizeof(int));
+
+    for (int i = 0; i < gn->taille; i++) {
+        if (i < m) {
+            gn_low->digits[i] = gn->digits[i];
+        } else {
+            gn_high->digits[i - m] = gn->digits[i];
+        }
+    }
+}
+
+void multiplier_karatsuba_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat) {
+    if (gn1->taille == 1 || gn2->taille == 1) {
+        multiplier_grand_nombre(gn1, gn2, resultat);
+        return;
+    }
+
+    int m = gn1->taille / 2;
+
+    GrandNombre gn1_high, gn1_low, gn2_high, gn2_low;
+    decouper_grand_nombre(gn1, &gn1_high, &gn1_low, m);
+    decouper_grand_nombre(gn2, &gn2_high, &gn2_low, m);
+
+    GrandNombre z, y, x, tmp1, tmp2, tmp3;
+    multiplier_karatsuba_grand_nombre(&gn1_low, &gn2_low, &z);
+    multiplier_karatsuba_grand_nombre(&gn1_high, &gn2_high, &y);
+
+    GrandNombre gn1_tmp, gn2_tmp;
+    additionner_grand_nombre(&gn1_low, &gn1_high, &gn1_tmp);
+    additionner_grand_nombre(&gn2_low, &gn2_high, &gn2_tmp);
+    multiplier_karatsuba_grand_nombre(&gn1_tmp, &gn2_tmp, &x);
+
+    soustraire_grand_nombre(&x, &y, &tmp1);
+    soustraire_grand_nombre(&tmp1, &z, &tmp2);
+
+    y.digits = realloc(y.digits, (2 * m + y.taille) * sizeof(int));
+    for (int i = y.taille - 1; i >= 0; --i) {
+        y.digits[i + 2 * m] = y.digits[i];
+    }
+    for (int i = 0; i < 2 * m; i++) {
+        y.digits[i] = 0;
+    }
+    y.taille += 2 * m;
+
+    tmp2.digits = realloc(tmp2.digits, (m + tmp2.taille) * sizeof(int));
+    for (int i = tmp2.taille - 1; i >= 0; --i) {
+        tmp2.digits[i + m] = tmp2.digits[i];
+    }
+    for (int i = 0; i < m; i++) {
+        tmp2.digits[i] = 0;
+    }
+    tmp2.taille += m;
+
+    additionner_grand_nombre(&y, &z, &tmp3);
+    additionner_grand_nombre(&tmp3, &tmp2, resultat);
+
+    liberer_grand_nombre(&gn1_high);
+    liberer_grand_nombre(&gn1_low);
+    liberer_grand_nombre(&gn2_high);
+    liberer_grand_nombre(&gn2_low);
+    liberer_grand_nombre(&z);
+    liberer_grand_nombre(&y);
+    liberer_grand_nombre(&x);
+    liberer_grand_nombre(&tmp1);
+    liberer_grand_nombre(&tmp2);
+    liberer_grand_nombre(&tmp3);
 }

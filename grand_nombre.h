@@ -26,5 +26,7 @@ int different_de(const GrandNombre* gn1, const GrandNombre* gn2);
 int inferieur_a(const GrandNombre* gn1, const GrandNombre* gn2);
 int inferieur_ou_egal_a(const GrandNombre* gn1, const GrandNombre* gn2);
 
+void decouper_grand_nombre(const GrandNombre* gn, GrandNombre* gn_high, GrandNombre* gn_low, int m);
+void multiplier_karatsuba_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
 
 #endif
