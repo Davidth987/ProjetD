@@ -8,7 +8,7 @@
 typedef struct GrandNombre {
     int *digits;
     int taille;
-    int positif;
+    bool positif;
 } GrandNombre;
 
 void inverser_grand_nombre(const GrandNombre* original, GrandNombre* inverse);
@@ -28,5 +28,7 @@ int inferieur_ou_egal_a(const GrandNombre* gn1, const GrandNombre* gn2);
 
 void decouper_grand_nombre(const GrandNombre* gn, GrandNombre* gn_high, GrandNombre* gn_low, int m);
 void multiplier_karatsuba_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
+
+void modulo_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat);
 
 #endif

@@ -290,3 +290,19 @@ void multiplier_karatsuba_grand_nombre(const GrandNombre* gn1, const GrandNombre
     liberer_grand_nombre(&tmp2);
     liberer_grand_nombre(&tmp3);
 }
+
+void modulo_grand_nombre(const GrandNombre* gn1, const GrandNombre* gn2, GrandNombre* resultat) {
+    resultat->taille = gn1->taille;
+    resultat->positif = gn1->positif;
+    resultat->digits = malloc(resultat->taille * sizeof(int));
+
+    for (int i = 0; i < gn1->taille; i++) {
+        resultat->digits[i] = gn1->digits[i];
+    }
+
+    GrandNombre gn2_bis = *gn2;
+
+    while (inferieur_ou_egal_a(&gn2_bis, resultat)) {
+        soustraire_grand_nombre(resultat, &gn2_bis, resultat);
+    }
+}
